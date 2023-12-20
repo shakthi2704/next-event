@@ -57,57 +57,56 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
   })
 
   async function onSubmit(values: z.infer<typeof eventFormSchema>) {
-    // let uploadedImageUrl = values.imageUrl
+    let uploadedImageUrl = values.imageUrl
 
-    // if (files.length > 0) {
-    //   const uploadedImages = await startUpload(files)
+    if (files.length > 0) {
+      const uploadedImages = await startUpload(files)
 
-    //   if (!uploadedImages) {
-    //     return
-    //   }
+      if (!uploadedImages) {
+        return
+      }
 
-    //   uploadedImageUrl = uploadedImages[0].url
-    // }
+      uploadedImageUrl = uploadedImages[0].url
+    }
 
-    // if (type === "Create") {
-    //   try {
-    //     const newEvent = await createEvent({
-    //       event: { ...values, imageUrl: uploadedImageUrl },
-    //       userId,
-    //       path: "/profile",
-    //     })
+    if (type === "Create") {
+      try {
+        const newEvent = await createEvent({
+          event: { ...values, imageUrl: uploadedImageUrl },
+          userId,
+          path: "/profile",
+        })
 
-    //     if (newEvent) {
-    //       form.reset()
-    //       router.push(`/events/${newEvent._id}`)
-    //     }
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
-    // }
+        if (newEvent) {
+          form.reset()
+          router.push(`/events/${newEvent._id}`)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
 
-    // if (type === "Update") {
-    //   if (!eventId) {
-    //     router.back()
-    //     return
-    //   }
+    if (type === "Update") {
+      if (!eventId) {
+        router.back()
+        return
+      }
 
-    //   try {
-    //     const updatedEvent = await updateEvent({
-    //       userId,
-    //       event: { ...values, imageUrl: uploadedImageUrl, _id: eventId },
-    //       path: `/events/${eventId}`,
-    //     })
+      try {
+        const updatedEvent = await updateEvent({
+          userId,
+          event: { ...values, imageUrl: uploadedImageUrl, _id: eventId },
+          path: `/events/${eventId}`,
+        })
 
-    //     if (updatedEvent) {
-    //       form.reset()
-    //       router.push(`/events/${updatedEvent._id}`)
-    //     }
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
-    // }
-    console.log(values)
+        if (updatedEvent) {
+          form.reset()
+          router.push(`/events/${updatedEvent._id}`)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 
   return (
